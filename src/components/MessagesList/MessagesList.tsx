@@ -36,7 +36,6 @@ export const MessagesList = () => {
     return (
         <div className={styles.container}>
             {messages.map(message => (
-                // Исправлено: styles вместо style
                 <div key={message.id} className={styles.messageCard}>
                     <h5>author: {message.author}</h5>
                     <p>{message.message}</p>
