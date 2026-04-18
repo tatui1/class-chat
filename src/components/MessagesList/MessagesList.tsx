@@ -3,7 +3,7 @@ import type {ApiMessage, IMessageFull} from '../../types.ts'
 import {axiosApi} from '../../axiosApi.ts'
 import { Card, CardContent, Typography, Box, IconButton, Badge } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import styles from './styles.module.css'
+
 
 export const MessagesList = () => {
     const [messages, setMessages] = useState<IMessageFull[]>([]);
@@ -43,7 +43,7 @@ export const MessagesList = () => {
     }, [])
     
     return (
-        <div className={styles.container}>
+        <div>
             {messages.map(message => (
                 <Card key={message.id} variant="outlined" sx={{ mb: 2, borderRadius: '20px' }}>
                     <CardContent>
