@@ -1,10 +1,19 @@
 import {useEffect, useState} from 'react'
 import type {ApiMessage, IMessageFull} from '../../types.ts'
 import {axiosApi} from '../../axiosApi.ts'
+import { Card, CardContent, Typography, Box, IconButton, Badge } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import styles from './styles.module.css'
 
 export const MessagesList = () => {
     const [messages, setMessages] = useState<IMessageFull[]>([]);
+    const likeMessage = async (msg: IMessageFull) => {
+        const updatedLikes = (msg.likes || 0) + 1;
+        await axiosApi.put(`/messages/${msg.id}.json`, {
+            ...msg,
+            likes: updatedLikes
+        })
+    }
 
     useEffect(() => {
         const getMessages = async() => {
@@ -29,17 +38,26 @@ export const MessagesList = () => {
 
         getMessages()
 
-        const interval = setInterval(getMessages, 5000)
+        const interval = setInterval(getMessages, 30000)
         return () => clearInterval(interval)
     }, [])
     
     return (
         <div className={styles.container}>
             {messages.map(message => (
-                <div key={message.id} className={styles.messageCard}>
-                    <h5>author: {message.author}</h5>
-                    <p>{message.message}</p>
-                </div>
+                <Card key={message.id} variant="outlined" sx={{ mb: 2, borderRadius: '20px' }}>
+                    <CardContent>
+                        <Typography variant="h6">author: {message.author}</Typography>
+                        <Typography variant="body1">{message.message}</Typography>
+                        <Box sx={{ mt: 1 }}>
+                            <IconButton onClick={() => likeMessage(message)} color="error">
+                                <Badge badgeContent={message.likes || 0} color="primary">
+                                    <FavoriteIcon />
+                                </Badge>
+                            </IconButton>
+                        </Box>
+                    </CardContent>
+                </Card>
             ))}
         </div>
     )
